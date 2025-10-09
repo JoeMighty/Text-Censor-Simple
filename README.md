@@ -23,7 +23,7 @@ Simply open `word-censor-tool.html` in any modern web browser - no installation 
 1. Clone or download this repository
 2. Open `word-censor-tool.html` in your browser
 3. Start typing in the text area
-4. Watch as censored words are automatically replaced with asterisks
+4. Watch as censored words are automatically blacked out
 
 ## 🛠️ Customization
 
