@@ -1,6 +1,6 @@
 # 🔒 Live Typing Censor Tool
 
-A real-time text censoring tool that automatically replaces inappropriate words with asterisks as you type. Perfect for content moderation, safe typing environments, or educational purposes.
+A real-time text censoring tool that automatically blacksout  words as you type. Perfect for content moderation, safe typing environments, or educational purposes.
 
 ## ✨ Features
 
