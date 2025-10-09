@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Typing Censor Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .word-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .word-list h3 {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .word-list p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .word-list .word-tag {
+            display: inline-block;
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 10px;
+            margin: 3px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .editor-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 250px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+            transition: border-color 0.3s;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .censored-word {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .clear-btn {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .clear-btn:hover {
+            background: #e9ecef;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Live Typing Censor Tool</h1>
+        <p class="subtitle">Type freely - inappropriate words will be censored automatically as you type</p>
+
+        <div class="word-list">
+            <h3>📝 Censored Words List:</h3>
+            <p id="wordListDisplay"></p>
+        </div>
+
+        <div class="editor-wrapper">
+            <textarea 
+                id="textInput" 
+                placeholder="Start typing here... Censored words will be replaced with asterisks (****) in real-time."
+            ></textarea>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="wordCount">0</div>
+                <div class="stat-label">Words</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="charCount">0</div>
+                <div class="stat-label">Characters</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="censorCount">0</div>
+                <div class="stat-label">Words Censored</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="clear-btn" onclick="clearText()">Clear Text</button>
+            <button class="copy-btn" onclick="copyText()">Copy Text</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">Text copied to clipboard!</div>
+
+    <script>
+        // Placeholder list of words to censor (case-insensitive)
+        const censoredWords = [
+            'badword',
+            'inappropriate',
+            'offensive',
+            'censorme',
+            'banned',
+            'profanity',
+            'explicit'
+        ];
+
+        let totalCensorCount = 0;
+        const textInput = document.getElementById('textInput');
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const censorCountEl = document.getElementById('censorCount');
+        const wordListDisplay = document.getElementById('wordListDisplay');
+
+        // Display the censored words list
+        function displayWordList() {
+            wordListDisplay.innerHTML = censoredWords
+                .map(word => `<span class="word-tag">${word}</span>`)
+                .join('');
+        }
+
+        // Create regex pattern for censored words
+        function createCensorPattern() {
+            const pattern = censoredWords
+                .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                .join('|');
+            return new RegExp(`\\b(${pattern})\\b`, 'gi');
+        }
+
+        // Censor the text
+        function censorText(text) {
+            let censoredCount = 0;
+            const pattern = createCensorPattern();
+            
+            const censored = text.replace(pattern, (match) => {
+                censoredCount++;
+                return '█'.repeat(match.length);
+            });
+            
+            return { text: censored, count: censoredCount };
+        }
+
+        // Update statistics
+        function updateStats(text) {
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            wordCountEl.textContent = words.length || 0;
+            charCountEl.textContent = text.length;
+        }
+
+        // Handle text input with real-time censoring
+        textInput.addEventListener('input', function(e) {
+            const cursorPosition = this.selectionStart;
+            const originalText = this.value;
+            
+            const { text: censoredText, count } = censorText(originalText);
+            
+            // Calculate cursor position adjustment
+            const beforeCursor = originalText.substring(0, cursorPosition);
+            const { text: censoredBefore } = censorText(beforeCursor);
+            const newCursorPosition = censoredBefore.length;
+            
+            // Update textarea value
+            if (censoredText !== originalText) {
+                this.value = censoredText;
+                this.setSelectionRange(newCursorPosition, newCursorPosition);
+                totalCensorCount += count;
+            }
+            
+            updateStats(censoredText);
+            censorCountEl.textContent = totalCensorCount;
+        });
+
+        // Clear text
+        function clearText() {
+            textInput.value = '';
+            totalCensorCount = 0;
+            updateStats('');
+            censorCountEl.textContent = 0;
+            textInput.focus();
+        }
+
+        // Copy text to clipboard
+        function copyText() {
+            const text = textInput.value;
+            
+            if (text.trim() === '') {
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.getElementById('notification');
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy text');
+            });
+        }
+
+        // Initialize
+        displayWordList();
+        updateStats('');
+    </script>
+</body>
+</html>
