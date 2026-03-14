@@ -8,7 +8,7 @@ const charCountEl = document.getElementById('charCount');
 const censorCountEl = document.getElementById('censorCount');
 const wordListDisplay = document.getElementById('wordListDisplay');
 
-// Initialize Theme
+// Theme Management
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
@@ -31,9 +31,7 @@ function createCensorPattern() {
 function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('themeToggle');
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    
-    if (isDark) {
+    if (body.getAttribute('data-theme') === 'dark') {
         body.removeAttribute('data-theme');
         btn.textContent = '🌙 Dark Mode';
         localStorage.setItem('theme', 'light');
@@ -97,17 +95,41 @@ function clearText() {
     textInput.focus();
 }
 
-function copyText() {
-    if (!textInput.value) return;
-    navigator.clipboard.writeText(textInput.value).then(() => {
-        const note = document.getElementById('notification');
-        note.classList.add('show');
-        note.setAttribute('aria-hidden', 'false');
-        setTimeout(() => {
-            note.classList.remove('show');
-            note.setAttribute('aria-hidden', 'true');
-        }, 2500);
-    });
+/**
+ * Copy Text Functionality
+ * Uses Clipboard API with a fallback for older browsers
+ */
+async function copyText() {
+    const textToCopy = textInput.value;
+    if (!textToCopy) return;
+
+    try {
+        await navigator.clipboard.writeText(textToCopy);
+        showNotification();
+    } catch (err) {
+        // Fallback for browsers without Clipboard API support
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showNotification();
+        } catch (copyErr) {
+            console.error('Fallback copy failed', copyErr);
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+function showNotification() {
+    const note = document.getElementById('notification');
+    note.classList.add('show');
+    note.setAttribute('aria-hidden', 'false');
+    setTimeout(() => {
+        note.classList.remove('show');
+        note.setAttribute('aria-hidden', 'true');
+    }, 2500);
 }
 
 function downloadText() {
