@@ -2,63 +2,55 @@
 
 # 🔒 Live Typing Censor Tool
 
-A real-time text censoring tool that automatically blacks out words as you type. Perfect for content moderation, safe typing environments, or educational purposes.
+**A premium, Apple-inspired real-time text moderation utility.**
 
-<br />
-
+[![GitHub license](https://img.shields.io/github/license/JoeMighty/Text-Censor-Simple?style=for-the-badge&color=blue)](https://github.com/JoeMighty/Text-Censor-Simple/blob/main/LICENSE)
 [![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![GitHub license](https://img.shields.io/github/license/JoeMighty/Text-Censor-Simple?style=for-the-badge&color=blue)](https://github.com/JoeMighty/Text-Censor-Simple/blob/main/LICENSE)
 
-### [🚀 View Live Demo](https://joemighty.github.io/Text-Censor-Simple/)
+### [🚀 Explore the Live Demo](https://joemighty.github.io/Text-Censor-Simple/)
 
 ---
-
 </div>
 
-### ✨ Features
+## ✨ Features
 
-* **⚡ Real-time Censoring** — Words are instantly replaced with `█` characters as you type.
-* **🌙 Dark Mode** — Toggle between light and dark themes with persistent memory.
-* **💾 Persistent Storage** — Custom words and theme settings are saved to your browser's LocalStorage.
-* **🎯 Smart Cursor Positioning** — Maintains your typing flow even after automatic replacements.
-* **📊 Live Statistics** — Real-time tracking of word count, character count, and total censored instances.
-* **🔧 Dynamic Word List** — Add or reset censored words directly through the UI.
-* **📋 Export Options** — One-click "Copy to Clipboard" and "Download as .txt" functionality.
-* **📱 Responsive Design** — Modern, clean interface that works perfectly on desktop and mobile.
+* **⚡ Real-Time Censor Engine** — Instantly replaces sensitive words as you type with zero lag.
+* **🍏 Apple HIG Design** — A polished interface following Apple Human Interface Guidelines, featuring translucency, SF-style typography, and "Material" depth.
+* **👆 Haptic Interactions** — Responsive spring physics and haptic ripple effects on all button interactions.
+* **👁️ Hover Preview** — Peek behind the curtain. Hover over any censored word to reveal the original text for quick verification.
+* **🎨 Custom Stylings** — Choose between solid blocks, asterisks, crosses, or define your own custom censoring character.
+* **🌙 Adaptive Themes** — Native-feeling Light and Dark modes with persistent memory.
+* **💾 Local Persistence** — Your custom word list and preferred settings are saved automatically to your browser.
+* **📊 Live Analytics** — Real-time tracking of word count, character count, and total censored matches.
 
----
+## 💻 Tech Stack
 
-### 💻 Installation & Usage
+* **HTML5** — Semantic structure with advanced Meta tags for SEO and Social Previews.
+* **CSS3** — Custom properties (variables), Glassmorphism (backdrop-filters), and Spring-physics animations.
+* **JavaScript (ES6+)** — Regex-based filtering engine, LocalStorage API, and Haptic Ripple logic.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/JoeMighty/Text-Censor-Simple.git](https://github.com/JoeMighty/Text-Censor-Simple.git)
-    ```
-2.  **Open the project:**
-    Simply open the `index.html` file in any modern web browser.
-3.  **Start Typing:**
-    The tool will automatically detect and censor words from the list in real-time.
+## 🛠️ Getting Started
 
----
+You can use this tool immediately via the **[Live Demo](https://joemighty.github.io/Text-Censor-Simple/)**. 
 
-### 🛠️ Built With
+If you wish to modify the tool or host it yourself, please **Fork** this repository or **Clone** it to your local machine. No installation or build process is required. Simply open `index.html` in any modern web browser to begin.
 
-* **HTML5** for semantic structure.
-* **CSS3** for custom variables, transitions, and responsive layout.
-* **JavaScript (ES6+)** for Regex-based censoring and LocalStorage management.
+## 🚀 Setup & Customization
+* **Manage Words:** Use the toolbar to add custom sensitive words to your list. They are saved automatically to your browser's local storage.
+* **Select Style:** Use the dropdown menu to choose your preferred censor character (Blocks, Asterisks, etc.) or set a custom character.
+* **Moderate:** Start typing in the main canvas. Censoring happens instantly as you type.
+* **Export:** Once finished, use the **Copy Text** or **Save File** buttons to export your moderated content.
 
----
+## 🤝 Contributing
 
-### 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/JoeMighty/Text-Censor-Simple/issues).
+This is an open-source project and contributions are welcome! If you have ideas for new censoring algorithms or UI improvements, feel free to open a Pull Request.
 
 ---
 
 <div align="center">
 
-**Created by [Jobin Bennykutty](https://github.com/JoeMighty)**
+**Created with ❤️ by [Jobin Bennykutty](https://github.com/JoeMighty)**
 
 </div>
