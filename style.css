@@ -22,7 +22,7 @@
     --danger: #ff453a;
     --tag-bg: rgba(255, 255, 255, 0.08);
     --editor-shadow: rgba(0, 0, 0, 0.2);
-    --select-dropdown-bg: #1c1c1e;
+    --select-dropdown-bg: #1c1c1e; /* Specific for dark mode dropdowns */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +41,15 @@ body {
     opacity: 0.1;
 }
 
-.apple-shell { max-width: 850px; margin: 60px auto; padding: 20px; }
+/* FIX: Theme Toggle Position and Margin */
+.top-nav {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+.apple-shell { max-width: 850px; margin: 80px auto 40px; padding: 20px; }
 
 .hero-section { text-align: center; margin-bottom: 40px; }
 .app-icon { font-size: 3.5rem; display: block; margin-bottom: 8px; }
@@ -61,21 +69,48 @@ h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; }
 .toolbar { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 24px; }
 .toolbar-group { display: flex; gap: 10px; }
 
-.apple-input, .apple-select {
-    background: var(--tag-bg); border: none; padding: 12px 16px; border-radius: 12px;
-    color: var(--text-main); font-size: 0.95rem; font-weight: 500; outline: none;
-    cursor: pointer; -webkit-appearance: none; appearance: none;
+/* FIX: Dropdown and Options Contrast */
+.apple-select {
+    background: var(--tag-bg);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat; background-position: right 12px center; background-size: 14px; padding-right: 38px;
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 38px;
 }
 
-.apple-select option { background-color: var(--select-dropdown-bg); color: var(--text-main); }
+.apple-select option {
+    background-color: var(--select-dropdown-bg);
+    color: var(--text-main);
+}
+
+.apple-input {
+    background: var(--tag-bg);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+}
+
 .apple-input.small { width: 60px; text-align: center; }
 
-/* REFINED BUTTONS WITH RIPPLE CONTAINER */
+/* BUTTONS & RIPPLE */
 button {
     position: relative;
-    overflow: hidden; /* Important for ripple containment */
+    overflow: hidden;
     transition: transform 0.2s var(--spring-easing), opacity 0.2s ease;
     cursor: pointer;
     border: none;
@@ -88,7 +123,6 @@ button:active { transform: scale(0.94); }
 .apple-btn-secondary { background: var(--tag-bg); color: var(--text-main); padding: 12px 24px; border-radius: 12px; font-weight: 600; }
 .apple-btn-danger { background: rgba(255, 59, 48, 0.1); color: var(--danger); padding: 12px 24px; border-radius: 12px; font-weight: 600; }
 
-/* HAPTIC RIPPLE ELEMENT */
 .haptic-ripple {
     position: absolute;
     border-radius: 50%;
@@ -98,19 +132,12 @@ button:active { transform: scale(0.94); }
     pointer-events: none;
 }
 
-.apple-btn-secondary .haptic-ripple { background-color: rgba(0, 0, 0, 0.1); }
-[data-theme="dark"] .apple-btn-secondary .haptic-ripple { background-color: rgba(255, 255, 255, 0.15); }
-
 @keyframes ripple-animation {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
+    to { transform: scale(4); opacity: 0; }
 }
 
 .apple-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .word-tag { background: var(--tag-bg); padding: 5px 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-
 .delete-tag-btn { background: transparent; color: var(--text-sub); font-weight: 800; }
 .text-btn { background: none; color: var(--accent); font-weight: 700; padding: 4px 8px; border-radius: 6px; }
 
@@ -142,8 +169,6 @@ button:active { transform: scale(0.94); }
 .apple-footer-bar { margin-top: 24px; padding: 16px; text-align: center; font-weight: 600; font-size: 0.95rem; border-radius: 18px; }
 .apple-footer-bar a { color: var(--accent); text-decoration: none; }
 
-.theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
-
 .apple-toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
     background: #1c1c1e; color: white; padding: 12px 24px; border-radius: 16px; font-weight: 600;
@@ -154,4 +179,5 @@ button:active { transform: scale(0.94); }
 @media (max-width: 700px) {
     .toolbar, .action-row { flex-direction: column; }
     .stat-row { justify-content: space-between; gap: 10px; }
+    .top-nav { top: 12px; right: 12px; }
 }
