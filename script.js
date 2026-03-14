@@ -6,17 +6,13 @@ let customChar = localStorage.getItem('customChar') || '$';
 const textInput = document.getElementById('textInput');
 const styleSelect = document.getElementById('censorStyle');
 const wordListDisplay = document.getElementById('wordListDisplay');
-const customWrapper = document.getElementById('customCharWrapper');
 const customInput = document.getElementById('customCharInput');
 
-// Init
+// Init UI
 styleSelect.value = currentStyle;
 customInput.value = customChar;
-if (currentStyle === 'custom') customWrapper.style.display = 'block';
-
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.setAttribute('data-theme', 'dark');
-}
+if (currentStyle === 'custom') customInput.style.display = 'block';
+if (localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
 
 function displayWordList() {
     wordListDisplay.innerHTML = censoredWords.map((word, i) => `
@@ -27,7 +23,7 @@ function displayWordList() {
 function updateCensorStyle() {
     currentStyle = styleSelect.value;
     localStorage.setItem('censorStyle', currentStyle);
-    customWrapper.style.display = (currentStyle === 'custom') ? 'block' : 'none';
+    customInput.style.display = (currentStyle === 'custom') ? 'block' : 'none';
     processText();
 }
 
@@ -68,7 +64,7 @@ function resetWordList() {
 function processText() {
     const cursor = textInput.selectionStart;
     const original = textInput.value;
-    if (censoredWords.length === 0) { updateStats(original); return; }
+    if (censoredWords.length === 0) { updateStats(original, 0); return; }
 
     const pattern = new RegExp(`\\b(${censoredWords.join('|')})\\b`, 'gi');
     let matches = 0;
@@ -83,11 +79,10 @@ function processText() {
         textInput.value = result;
         textInput.setSelectionRange(cursor, cursor);
     }
-    
     updateStats(result, matches);
 }
 
-function updateStats(text, matches = 0) {
+function updateStats(text, matches) {
     const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
     document.getElementById('wordCount').innerText = words;
     document.getElementById('charCount').innerText = text.length;
@@ -98,12 +93,11 @@ textInput.addEventListener('input', processText);
 
 function clearText() { textInput.value = ''; processText(); }
 
-function copyText() {
-    navigator.clipboard.writeText(textInput.value).then(() => {
-        const n = document.getElementById('notification');
-        n.classList.add('show');
-        setTimeout(() => n.classList.remove('show'), 2000);
-    });
+async function copyText() {
+    await navigator.clipboard.writeText(textInput.value);
+    const n = document.getElementById('notification');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2000);
 }
 
 function downloadText() {
