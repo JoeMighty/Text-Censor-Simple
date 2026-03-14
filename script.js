@@ -8,13 +8,35 @@ const styleSelect = document.getElementById('censorStyle');
 const wordListDisplay = document.getElementById('wordListDisplay');
 const customInput = document.getElementById('customCharInput');
 
-// Init
+// Initialize
 styleSelect.value = currentStyle;
 customInput.value = customChar;
 if (currentStyle === 'custom') customInput.style.display = 'block';
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.setAttribute('data-theme', 'dark');
-}
+if (localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+
+/**
+ * Haptic Ripple Logic
+ */
+document.addEventListener('mousedown', function(e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+
+    const ripple = document.createElement('span');
+    ripple.classList.add('haptic-ripple');
+    
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+
+    btn.appendChild(ripple);
+
+    ripple.addEventListener('animationend', () => ripple.remove());
+});
 
 function displayWordList() {
     wordListDisplay.innerHTML = censoredWords.map((word, i) => `
@@ -28,12 +50,6 @@ function updateCensorStyle() {
     customInput.style.display = (currentStyle === 'custom') ? 'block' : 'none';
     processText();
 }
-
-customInput.addEventListener('input', () => {
-    customChar = customInput.value || '█';
-    localStorage.setItem('customChar', customChar);
-    processText();
-});
 
 function addNewWord() {
     const input = document.getElementById('newWordInput');
@@ -115,7 +131,7 @@ function downloadText() {
     const blob = new Blob([editor.innerText], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'censored_note.txt';
+    a.download = 'censored_text.txt';
     a.click();
 }
 
