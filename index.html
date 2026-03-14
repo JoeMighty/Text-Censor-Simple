@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Censor Tool</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="canvas-bg"></div>
@@ -50,20 +50,30 @@
             </div>
 
             <div class="info-bar">
-                <div class="stat-group">
-                    <span class="stat-item"><strong>Words:</strong> <span id="wordCount">0</span></span>
-                    <span class="stat-item"><strong>Chars:</strong> <span id="charCount">0</span></span>
-                    <span class="stat-item"><strong>Censored:</strong> <span id="censorCount">0</span></span>
+                <div class="stat-row">
+                    <div class="apple-stat">
+                        <span class="stat-label">Words</span>
+                        <span id="wordCount" class="stat-val">0</span>
+                    </div>
+                    <div class="apple-stat">
+                        <span class="stat-label">Chars</span>
+                        <span id="charCount" class="stat-val">0</span>
+                    </div>
+                    <div class="apple-stat">
+                        <span class="stat-label">Censored</span>
+                        <span id="censorCount" class="stat-val red">0</span>
+                    </div>
                 </div>
-                <div class="action-group">
-                    <button class="apple-btn-secondary" onclick="clearText()">Clear</button>
-                    <button class="apple-btn-primary" onclick="copyText()">Copy</button>
-                    <button class="apple-btn-secondary" onclick="downloadText()">Save</button>
+                
+                <div class="action-row">
+                    <button class="apple-btn-danger" onclick="clearText()">Clear Canvas</button>
+                    <button class="apple-btn-primary" onclick="copyText()">Copy Text</button>
+                    <button class="apple-btn-secondary" onclick="downloadText()">Save File</button>
                 </div>
             </div>
         </section>
 
-        <footer class="apple-footer">
+        <footer class="apple-footer-bar glass">
             <p>Created by <a href="https://github.com/JoeMighty" target="_blank">Jobin Bennykutty</a></p>
         </footer>
     </main>
