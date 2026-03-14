@@ -1,150 +1,131 @@
-const DEFAULT_WORDS = ['badword', 'inappropriate', 'offensive', 'censorme', 'banned'];
+const DEFAULT_WORDS = ['badword', 'offensive', 'censorme'];
 let censoredWords = JSON.parse(localStorage.getItem('censoredWords')) || [...DEFAULT_WORDS];
+let currentStyle = localStorage.getItem('censorStyle') || '█';
+let customChar = localStorage.getItem('customChar') || '$';
 
-let totalCensorCount = 0;
 const textInput = document.getElementById('textInput');
-const wordCountEl = document.getElementById('wordCount');
-const charCountEl = document.getElementById('charCount');
-const censorCountEl = document.getElementById('censorCount');
+const styleSelect = document.getElementById('censorStyle');
 const wordListDisplay = document.getElementById('wordListDisplay');
+const customWrapper = document.getElementById('customCharWrapper');
+const customInput = document.getElementById('customCharInput');
 
-// Theme Management
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
+// Init
+styleSelect.value = currentStyle;
+customInput.value = customChar;
+if (currentStyle === 'custom') customWrapper.style.display = 'block';
+
+if (localStorage.getItem('theme') === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
-    document.getElementById('themeToggle').textContent = '☀️ Light Mode';
 }
 
 function displayWordList() {
-    wordListDisplay.innerHTML = censoredWords
-        .map(word => `<span class="word-tag">${word}</span>`)
-        .join('');
+    wordListDisplay.innerHTML = censoredWords.map((word, i) => `
+        <span class="word-tag">${word}<button class="delete-tag-btn" onclick="removeWord(${i})">✕</button></span>
+    `).join('');
 }
 
-function createCensorPattern() {
-    const pattern = censoredWords
-        .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-        .join('|');
-    return new RegExp(`\\b(${pattern})\\b`, 'gi');
+function updateCensorStyle() {
+    currentStyle = styleSelect.value;
+    localStorage.setItem('censorStyle', currentStyle);
+    customWrapper.style.display = (currentStyle === 'custom') ? 'block' : 'none';
+    processText();
 }
 
-function toggleTheme() {
-    const body = document.body;
-    const btn = document.getElementById('themeToggle');
-    if (body.getAttribute('data-theme') === 'dark') {
-        body.removeAttribute('data-theme');
-        btn.textContent = '🌙 Dark Mode';
-        localStorage.setItem('theme', 'light');
-    } else {
-        body.setAttribute('data-theme', 'dark');
-        btn.textContent = '☀️ Light Mode';
-        localStorage.setItem('theme', 'dark');
-    }
-}
+customInput.addEventListener('input', () => {
+    customChar = customInput.value || '█';
+    localStorage.setItem('customChar', customChar);
+    processText();
+});
 
 function addNewWord() {
     const input = document.getElementById('newWordInput');
     const word = input.value.trim().toLowerCase();
     if (word && !censoredWords.includes(word)) {
         censoredWords.push(word);
-        localStorage.setItem('censoredWords', JSON.stringify(censoredWords));
-        displayWordList();
+        save();
         input.value = '';
-        textInput.dispatchEvent(new Event('input'));
     }
+}
+
+function removeWord(i) {
+    censoredWords.splice(i, 1);
+    save();
+}
+
+function save() {
+    localStorage.setItem('censoredWords', JSON.stringify(censoredWords));
+    displayWordList();
+    processText();
 }
 
 function resetWordList() {
-    if (confirm("Reset the word list to default?")) {
+    if (confirm("Reset word list?")) {
         censoredWords = [...DEFAULT_WORDS];
-        localStorage.setItem('censoredWords', JSON.stringify(censoredWords));
-        displayWordList();
-        textInput.dispatchEvent(new Event('input'));
+        save();
     }
 }
 
-textInput.addEventListener('input', function() {
-    const cursorPosition = this.selectionStart;
-    const originalText = this.value;
-    const pattern = createCensorPattern();
-    
-    let currentMatchCount = 0;
-    const censoredText = originalText.replace(pattern, (match) => {
-        currentMatchCount++;
-        return '█'.repeat(match.length);
+function processText() {
+    const cursor = textInput.selectionStart;
+    const original = textInput.value;
+    if (censoredWords.length === 0) { updateStats(original); return; }
+
+    const pattern = new RegExp(`\\b(${censoredWords.join('|')})\\b`, 'gi');
+    let matches = 0;
+    const charToUse = (currentStyle === 'custom') ? customChar : currentStyle;
+
+    const result = original.replace(pattern, (match) => {
+        matches++;
+        return charToUse.repeat(match.length);
     });
 
-    if (censoredText !== originalText) {
-        this.value = censoredText;
-        this.setSelectionRange(cursorPosition, cursorPosition);
-        totalCensorCount += currentMatchCount;
+    if (result !== original) {
+        textInput.value = result;
+        textInput.setSelectionRange(cursor, cursor);
     }
-
-    const words = censoredText.trim().split(/\s+/).filter(w => w.length > 0);
-    wordCountEl.textContent = words.length;
-    charCountEl.textContent = censoredText.length;
-    censorCountEl.textContent = totalCensorCount;
-});
-
-function clearText() {
-    textInput.value = '';
-    totalCensorCount = 0;
-    wordCountEl.textContent = '0';
-    charCountEl.textContent = '0';
-    censorCountEl.textContent = '0';
-    textInput.focus();
+    
+    updateStats(result, matches);
 }
 
-/**
- * Copy Text Functionality
- * Uses Clipboard API with a fallback for older browsers
- */
-async function copyText() {
-    const textToCopy = textInput.value;
-    if (!textToCopy) return;
-
-    try {
-        await navigator.clipboard.writeText(textToCopy);
-        showNotification();
-    } catch (err) {
-        // Fallback for browsers without Clipboard API support
-        const textArea = document.createElement("textarea");
-        textArea.value = textToCopy;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            showNotification();
-        } catch (copyErr) {
-            console.error('Fallback copy failed', copyErr);
-        }
-        document.body.removeChild(textArea);
-    }
+function updateStats(text, matches = 0) {
+    const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    document.getElementById('wordCount').innerText = words;
+    document.getElementById('charCount').innerText = text.length;
+    document.getElementById('censorCount').innerText = matches;
 }
 
-function showNotification() {
-    const note = document.getElementById('notification');
-    note.classList.add('show');
-    note.setAttribute('aria-hidden', 'false');
-    setTimeout(() => {
-        note.classList.remove('show');
-        note.setAttribute('aria-hidden', 'true');
-    }, 2500);
+textInput.addEventListener('input', processText);
+
+function clearText() { textInput.value = ''; processText(); }
+
+function copyText() {
+    navigator.clipboard.writeText(textInput.value).then(() => {
+        const n = document.getElementById('notification');
+        n.classList.add('show');
+        setTimeout(() => n.classList.remove('show'), 2000);
+    });
 }
 
 function downloadText() {
-    const text = textInput.value;
-    if (!text) return;
-    const blob = new Blob([text], { type: 'text/plain' });
-    const anchor = document.createElement('a');
-    anchor.download = 'censored-content.txt';
-    anchor.href = window.URL.createObjectURL(blob);
-    anchor.click();
-    window.URL.revokeObjectURL(anchor.href);
+    const blob = new Blob([textInput.value], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'censored_text.txt';
+    a.click();
 }
 
-document.getElementById('newWordInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addNewWord();
-});
+function toggleTheme() {
+    const isDark = document.body.hasAttribute('data-theme');
+    const btn = document.getElementById('themeToggle');
+    if (isDark) {
+        document.body.removeAttribute('data-theme');
+        btn.textContent = '🌙 Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.body.setAttribute('data-theme', 'dark');
+        btn.textContent = '☀️ Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
 
 displayWordList();
