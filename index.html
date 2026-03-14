@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Typing Censor Tool</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="background-blobs"></div>
@@ -14,10 +14,10 @@
     <main class="bento-grid">
         <header class="bento-item header-tile glass">
             <div class="title-container">
-                <span class="icon">🔒</span>
+                <span class="main-icon">🔒</span>
                 <div class="text-group">
                     <h1>Live Typing Censor Tool</h1>
-                    <p class="subtitle">Type freely — Censored words are replaced in real-time.</p>
+                    <p class="subtitle">Type freely — Hover over censored words to reveal the original.</p>
                 </div>
             </div>
         </header>
@@ -25,7 +25,7 @@
         <section class="bento-item word-list-tile glass">
             <div class="tile-header">
                 <h3>📝 Word List</h3>
-                <button class="reset-btn" onclick="resetWordList()">Reset</button>
+                <button class="reset-btn" onclick="resetWordList()">Reset Default</button>
             </div>
             <div id="wordListDisplay" class="tags-container"></div>
         </section>
@@ -47,7 +47,7 @@
         </section>
 
         <section class="bento-item editor-tile glass">
-            <textarea id="textInput" placeholder="Start typing here..."></textarea>
+            <div id="textInput" class="rich-editor" contenteditable="true" placeholder="Start typing here..."></div>
         </section>
 
         <div class="bento-item stat-tile glass">
@@ -64,13 +64,13 @@
         </div>
 
         <section class="bento-item actions-tile glass">
-            <button class="action-btn clear" onclick="clearText()">Clear</button>
-            <button class="action-btn copy" onclick="copyText()">Copy</button>
-            <button class="action-btn download" onclick="downloadText()">Save .txt</button>
+            <button class="action-btn clear" onclick="clearText()">Clear Canvas</button>
+            <button class="action-btn copy" onclick="copyText()">Copy Text</button>
+            <button class="action-btn download" onclick="downloadText()">Save File</button>
         </section>
 
         <footer class="bento-item footer-tile glass">
-            Created by <a href="https://github.com/JoeMighty" target="_blank" rel="noopener">Jobin Bennykutty</a>
+            <p>Created by <a href="https://github.com/JoeMighty" target="_blank" rel="noopener">Jobin Bennykutty</a></p>
         </footer>
     </main>
 
