@@ -8,7 +8,7 @@ const charCountEl = document.getElementById('charCount');
 const censorCountEl = document.getElementById('censorCount');
 const wordListDisplay = document.getElementById('wordListDisplay');
 
-// Initialize Theme from Storage
+// Initialize Theme
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
