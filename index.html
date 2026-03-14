@@ -7,31 +7,33 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle between dark and light mode">🌙 Dark Mode</button>
     
-    <div class="container">
+    <main class="container">
         <h1>🔒 Live Typing Censor Tool</h1>
         <p class="subtitle">Type freely — Censor words as you type</p>
 
-        <div class="word-list">
-            <h3>📝 Censored Words List:</h3>
+        <section class="word-list" aria-labelledby="list-heading">
+            <h3 id="list-heading">📝 Censored Words List:</h3>
             <p id="wordListDisplay"></p>
             <button class="reset-words-btn" onclick="resetWordList()">Reset to Default</button>
-        </div>
+        </section>
 
         <div class="input-group">
+            <label for="newWordInput" class="visually-hidden">Add a new word to censor</label>
             <input type="text" id="newWordInput" placeholder="Add a new word to censor...">
             <button class="add-btn" onclick="addNewWord()">Add Word</button>
         </div>
 
         <div class="editor-wrapper">
+            <label for="textInput" class="visually-hidden">Text to censor</label>
             <textarea 
                 id="textInput" 
                 placeholder="Start typing here... Censored words will be blacked out in real-time."
             ></textarea>
         </div>
 
-        <div class="stats">
+        <div class="stats" role="region" aria-live="polite">
             <div class="stat-box">
                 <div class="stat-number" id="wordCount">0</div>
                 <div class="stat-label">Words</div>
@@ -53,11 +55,11 @@
         </div>
 
         <footer>
-            Created by <a href="https://github.com/JoeMighty" target="_blank">Jobin Bennykutty</a>
+            Created by <a href="https://github.com/JoeMighty" target="_blank" rel="noopener">Jobin Bennykutty</a>
         </footer>
-    </div>
+    </main>
 
-    <div class="notification" id="notification">Text copied to clipboard!</div>
+    <div class="notification" id="notification" role="status" aria-hidden="true">Text copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
