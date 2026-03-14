@@ -3,78 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Typing Censor Tool</title>
+    <title>Censor Tool</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="background-blobs"></div>
-    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙 Dark Mode</button>
+    <div class="canvas-bg"></div>
     
-    <main class="bento-grid">
-        <header class="bento-item header-tile glass">
-            <div class="title-container">
-                <span class="main-icon">🔒</span>
-                <div class="text-group">
-                    <h1>Live Typing Censor Tool</h1>
-                    <p class="subtitle">Type freely — Hover over censored words to reveal the original.</p>
-                </div>
-            </div>
+    <nav class="top-nav">
+        <button id="themeToggle" class="apple-btn-secondary" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </nav>
+
+    <main class="apple-shell">
+        <header class="hero-section">
+            <span class="app-icon">🔒</span>
+            <h1>Live Typing Censor Tool</h1>
+            <p>Type freely. Censored words are replaced in real-time.</p>
         </header>
 
-        <section class="bento-item word-list-tile glass">
-            <div class="tile-header">
-                <h3>📝 Word List</h3>
-                <button class="reset-btn" onclick="resetWordList()">Reset Default</button>
+        <section class="main-surface glass">
+            <div class="surface-content">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <select id="censorStyle" class="apple-select" onchange="updateCensorStyle()">
+                            <option value="█">Block (█)</option>
+                            <option value="*">Asterisks (*)</option>
+                            <option value="x">Crosses (x)</option>
+                            <option value="custom">Custom Character</option>
+                        </select>
+                        <input type="text" id="customCharInput" maxlength="1" class="apple-input small" value="$" style="display: none;">
+                    </div>
+                    <div class="toolbar-group">
+                        <input type="text" id="newWordInput" class="apple-input" placeholder="Add word...">
+                        <button class="apple-btn-primary" onclick="addNewWord()">Add</button>
+                    </div>
+                </div>
+
+                <div class="word-list-container">
+                    <div id="wordListDisplay" class="apple-tags"></div>
+                    <button class="text-btn" onclick="resetWordList()">Reset Default</button>
+                </div>
+
+                <div class="separator"></div>
+
+                <div id="textInput" class="apple-editor" contenteditable="true" placeholder="Start typing here..."></div>
             </div>
-            <div id="wordListDisplay" class="tags-container"></div>
-        </section>
 
-        <section class="bento-item settings-tile glass">
-            <div class="input-stack">
-                <input type="text" id="newWordInput" placeholder="Add word...">
-                <button class="add-btn" onclick="addNewWord()">Add</button>
-            </div>
-            <div class="style-stack">
-                <select id="censorStyle" class="style-select" onchange="updateCensorStyle()">
-                    <option value="█">Block (█)</option>
-                    <option value="*">Asterisks (*)</option>
-                    <option value="x">Crosses (x)</option>
-                    <option value="custom">Custom Char</option>
-                </select>
-                <input type="text" id="customCharInput" maxlength="1" placeholder="Char" value="$" style="display: none;">
+            <div class="info-bar">
+                <div class="stat-group">
+                    <span class="stat-item"><strong>Words:</strong> <span id="wordCount">0</span></span>
+                    <span class="stat-item"><strong>Chars:</strong> <span id="charCount">0</span></span>
+                    <span class="stat-item"><strong>Censored:</strong> <span id="censorCount">0</span></span>
+                </div>
+                <div class="action-group">
+                    <button class="apple-btn-secondary" onclick="clearText()">Clear</button>
+                    <button class="apple-btn-primary" onclick="copyText()">Copy</button>
+                    <button class="apple-btn-secondary" onclick="downloadText()">Save</button>
+                </div>
             </div>
         </section>
 
-        <section class="bento-item editor-tile glass">
-            <div id="textInput" class="rich-editor" contenteditable="true" placeholder="Start typing here..."></div>
-        </section>
-
-        <div class="bento-item stat-tile glass">
-            <span class="stat-label">Words</span>
-            <span class="stat-number glow-blue" id="wordCount">0</span>
-        </div>
-        <div class="bento-item stat-tile glass">
-            <span class="stat-label">Chars</span>
-            <span class="stat-number glow-purple" id="charCount">0</span>
-        </div>
-        <div class="bento-item stat-tile glass">
-            <span class="stat-label">Censored</span>
-            <span class="stat-number glow-red" id="censorCount">0</span>
-        </div>
-
-        <section class="bento-item actions-tile glass">
-            <button class="action-btn clear" onclick="clearText()">Clear Canvas</button>
-            <button class="action-btn copy" onclick="copyText()">Copy Text</button>
-            <button class="action-btn download" onclick="downloadText()">Save File</button>
-        </section>
-
-        <footer class="bento-item footer-tile glass">
-            <p>Created by <a href="https://github.com/JoeMighty" target="_blank" rel="noopener">Jobin Bennykutty</a></p>
+        <footer class="apple-footer">
+            <p>Created by <a href="https://github.com/JoeMighty" target="_blank">Jobin Bennykutty</a></p>
         </footer>
     </main>
 
-    <div class="notification" id="notification">Copied to clipboard!</div>
+    <div class="apple-toast" id="notification">Copied to clipboard</div>
 
     <script src="script.js"></script>
 </body>
