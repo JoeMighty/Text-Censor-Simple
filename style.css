@@ -22,7 +22,7 @@
     --danger: #ff453a;
     --tag-bg: rgba(255, 255, 255, 0.08);
     --editor-shadow: rgba(0, 0, 0, 0.2);
-    --select-dropdown-bg: #1c1c1e; /* Specific for dark mode dropdowns */
+    --select-dropdown-bg: #1c1c1e;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,12 +41,20 @@ body {
     opacity: 0.1;
 }
 
-/* FIX: Theme Toggle Position and Margin */
+/* FIX: Absolute pin to top-right with explicit margins */
 .top-nav {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    z-index: 1000;
+    position: absolute; /* Using absolute to stay within document flow but pinned */
+    top: 32px;
+    right: 32px;
+    margin: 0;
+    padding: 0;
+    z-index: 9999;
+}
+
+/* Ensure the button itself doesn't have floating issues */
+#themeToggle {
+    display: block;
+    float: right;
 }
 
 .apple-shell { max-width: 850px; margin: 80px auto 40px; padding: 20px; }
@@ -69,7 +77,6 @@ h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; }
 .toolbar { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 24px; }
 .toolbar-group { display: flex; gap: 10px; }
 
-/* FIX: Dropdown and Options Contrast */
 .apple-select {
     background: var(--tag-bg);
     border: none;
@@ -107,7 +114,6 @@ h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; }
 
 .apple-input.small { width: 60px; text-align: center; }
 
-/* BUTTONS & RIPPLE */
 button {
     position: relative;
     overflow: hidden;
@@ -179,5 +185,5 @@ button:active { transform: scale(0.94); }
 @media (max-width: 700px) {
     .toolbar, .action-row { flex-direction: column; }
     .stat-row { justify-content: space-between; gap: 10px; }
-    .top-nav { top: 12px; right: 12px; }
+    .top-nav { top: 20px; right: 20px; }
 }
