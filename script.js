@@ -1,4 +1,3 @@
-// Default word list if none exists in storage
 const DEFAULT_WORDS = ['badword', 'inappropriate', 'offensive', 'censorme', 'banned'];
 let censoredWords = JSON.parse(localStorage.getItem('censoredWords')) || [...DEFAULT_WORDS];
 
@@ -9,8 +8,9 @@ const charCountEl = document.getElementById('charCount');
 const censorCountEl = document.getElementById('censorCount');
 const wordListDisplay = document.getElementById('wordListDisplay');
 
-// Initialize Theme
-if (localStorage.getItem('theme') === 'dark') {
+// Initialize Theme from Storage
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
     document.body.setAttribute('data-theme', 'dark');
     document.getElementById('themeToggle').textContent = '☀️ Light Mode';
 }
@@ -22,7 +22,6 @@ function displayWordList() {
 }
 
 function createCensorPattern() {
-    // Escape special characters in words for Regex
     const pattern = censoredWords
         .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
         .join('|');
@@ -32,7 +31,9 @@ function createCensorPattern() {
 function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('themeToggle');
-    if (body.getAttribute('data-theme') === 'dark') {
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
         body.removeAttribute('data-theme');
         btn.textContent = '🌙 Dark Mode';
         localStorage.setItem('theme', 'light');
@@ -51,7 +52,6 @@ function addNewWord() {
         localStorage.setItem('censoredWords', JSON.stringify(censoredWords));
         displayWordList();
         input.value = '';
-        // Trigger re-processing of current text
         textInput.dispatchEvent(new Event('input'));
     }
 }
@@ -78,12 +78,10 @@ textInput.addEventListener('input', function() {
 
     if (censoredText !== originalText) {
         this.value = censoredText;
-        // Keep cursor at the correct position
         this.setSelectionRange(cursorPosition, cursorPosition);
         totalCensorCount += currentMatchCount;
     }
 
-    // Stats update
     const words = censoredText.trim().split(/\s+/).filter(w => w.length > 0);
     wordCountEl.textContent = words.length;
     charCountEl.textContent = censoredText.length;
@@ -104,7 +102,11 @@ function copyText() {
     navigator.clipboard.writeText(textInput.value).then(() => {
         const note = document.getElementById('notification');
         note.classList.add('show');
-        setTimeout(() => note.classList.remove('show'), 2000);
+        note.setAttribute('aria-hidden', 'false');
+        setTimeout(() => {
+            note.classList.remove('show');
+            note.setAttribute('aria-hidden', 'true');
+        }, 2500);
     });
 }
 
@@ -119,10 +121,8 @@ function downloadText() {
     window.URL.revokeObjectURL(anchor.href);
 }
 
-// Allow adding word with Enter key
 document.getElementById('newWordInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addNewWord();
 });
 
-// Initial run
 displayWordList();
