@@ -5,76 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Typing Censor Tool</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="background-blobs"></div>
     <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙 Dark Mode</button>
     
-    <main class="container">
-        <h1>🔒 Live Typing Censor Tool</h1>
-        <p class="subtitle">Type freely — Censored words are replaced in real-time.</p>
+    <main class="bento-grid">
+        <header class="bento-item header-tile glass">
+            <div class="title-container">
+                <span class="icon">🔒</span>
+                <div class="text-group">
+                    <h1>Live Typing Censor Tool</h1>
+                    <p class="subtitle">Type freely — Censored words are replaced in real-time.</p>
+                </div>
+            </div>
+        </header>
 
-        <section class="word-list" aria-labelledby="list-heading">
-            <h3 id="list-heading">📝 Censored Words List:</h3>
+        <section class="bento-item word-list-tile glass" aria-labelledby="list-heading">
+            <div class="tile-header">
+                <h3 id="list-heading">📝 Word List</h3>
+                <button class="reset-btn" onclick="resetWordList()">Reset</button>
+            </div>
             <div id="wordListDisplay" class="tags-container"></div>
-            <button class="reset-words-btn" onclick="resetWordList()">Reset to Default</button>
         </section>
 
-        <div class="input-group">
-            <div class="field-stack">
+        <section class="bento-item settings-tile glass">
+            <div class="input-stack">
                 <input type="text" id="newWordInput" placeholder="Add word...">
+                <button class="add-btn" onclick="addNewWord()">Add</button>
             </div>
-            
-            <div class="field-stack">
+            <div class="style-stack">
                 <select id="censorStyle" class="style-select" onchange="updateCensorStyle()">
-                    <option value="█">Solid Block (█)</option>
+                    <option value="█">Block (█)</option>
                     <option value="*">Asterisks (*)</option>
                     <option value="x">Crosses (x)</option>
-                    <option value="?">Question Marks (?)</option>
-                    <option value="custom">Custom Character...</option>
+                    <option value="custom">Custom Char</option>
                 </select>
+                <input type="text" id="customCharInput" maxlength="1" placeholder="Char" value="$" style="display: none;">
             </div>
+        </section>
 
-            <div class="field-stack" id="customCharWrapper" style="display: none;">
-                <input type="text" id="customCharInput" maxlength="1" placeholder="Char" value="$">
-            </div>
-            
-            <button class="add-btn" onclick="addNewWord()">Add</button>
+        <section class="bento-item editor-tile glass">
+            <textarea id="textInput" placeholder="Start typing here..."></textarea>
+        </section>
+
+        <div class="bento-item stat-tile glass">
+            <span class="stat-label">Words</span>
+            <span class="stat-number" id="wordCount">0</span>
+        </div>
+        <div class="bento-item stat-tile glass">
+            <span class="stat-label">Chars</span>
+            <span class="stat-number" id="charCount">0</span>
+        </div>
+        <div class="bento-item stat-tile glass">
+            <span class="stat-label">Censored</span>
+            <span class="stat-number" id="censorCount">0</span>
         </div>
 
-        <div class="editor-wrapper">
-            <textarea 
-                id="textInput" 
-                placeholder="Start typing here..."
-            ></textarea>
-        </div>
+        <section class="bento-item actions-tile glass">
+            <button class="action-btn clear" onclick="clearText()">Clear</button>
+            <button class="action-btn copy" onclick="copyText()">Copy</button>
+            <button class="action-btn download" onclick="downloadText()">Save .txt</button>
+        </section>
 
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number" id="wordCount">0</div>
-                <div class="stat-label">Words</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="charCount">0</div>
-                <div class="stat-label">Characters</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="censorCount">0</div>
-                <div class="stat-label">Censored</div>
-            </div>
-        </div>
-
-        <div class="controls">
-            <button class="clear-btn" onclick="clearText()">Clear</button>
-            <button class="copy-btn" onclick="copyText()">Copy Text</button>
-            <button class="download-btn" onclick="downloadText()">Download .txt</button>
-        </div>
-
-        <footer>
+        <footer class="bento-item footer-tile glass">
             Created by <a href="https://github.com/JoeMighty" target="_blank" rel="noopener">Jobin Bennykutty</a>
         </footer>
     </main>
 
-    <div class="notification" id="notification">Text copied to clipboard!</div>
+    <div class="notification" id="notification">Copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
