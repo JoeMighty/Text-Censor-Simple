@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle between dark and light mode">🌙 Dark Mode</button>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙 Dark Mode</button>
     
     <main class="container">
         <h1>🔒 Live Typing Censor Tool</h1>
-        <p class="subtitle">Type freely — Censor words as you type</p>
+        <p class="subtitle">Type freely — Censored words are replaced in real-time.</p>
 
         <section class="word-list" aria-labelledby="list-heading">
             <h3 id="list-heading">📝 Censored Words List:</h3>
@@ -20,20 +20,35 @@
         </section>
 
         <div class="input-group">
-            <label for="newWordInput" class="visually-hidden">Add a new word to censor</label>
-            <input type="text" id="newWordInput" placeholder="Add a new word to censor...">
-            <button class="add-btn" onclick="addNewWord()">Add Word</button>
+            <div class="field-stack">
+                <input type="text" id="newWordInput" placeholder="Add word...">
+            </div>
+            
+            <div class="field-stack">
+                <select id="censorStyle" class="style-select" onchange="updateCensorStyle()">
+                    <option value="█">Solid Block (█)</option>
+                    <option value="*">Asterisks (*)</option>
+                    <option value="x">Crosses (x)</option>
+                    <option value="?">Question Marks (?)</option>
+                    <option value="custom">Custom Character...</option>
+                </select>
+            </div>
+
+            <div class="field-stack" id="customCharWrapper" style="display: none;">
+                <input type="text" id="customCharInput" maxlength="1" placeholder="Char" value="$">
+            </div>
+            
+            <button class="add-btn" onclick="addNewWord()">Add</button>
         </div>
 
         <div class="editor-wrapper">
-            <label for="textInput" class="visually-hidden">Text to censor</label>
             <textarea 
                 id="textInput" 
-                placeholder="Start typing here... Censored words will be blacked out in real-time."
+                placeholder="Start typing here..."
             ></textarea>
         </div>
 
-        <div class="stats" role="region" aria-live="polite">
+        <div class="stats">
             <div class="stat-box">
                 <div class="stat-number" id="wordCount">0</div>
                 <div class="stat-label">Words</div>
@@ -44,13 +59,13 @@
             </div>
             <div class="stat-box">
                 <div class="stat-number" id="censorCount">0</div>
-                <div class="stat-label">Words Censored</div>
+                <div class="stat-label">Censored</div>
             </div>
         </div>
 
         <div class="controls">
             <button class="clear-btn" onclick="clearText()">Clear</button>
-            <button class="copy-btn" onclick="copyText()" id="copyBtn">Copy Text</button>
+            <button class="copy-btn" onclick="copyText()">Copy Text</button>
             <button class="download-btn" onclick="downloadText()">Download .txt</button>
         </div>
 
@@ -59,7 +74,7 @@
         </footer>
     </main>
 
-    <div class="notification" id="notification" role="status" aria-hidden="true">Text copied to clipboard!</div>
+    <div class="notification" id="notification">Text copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
